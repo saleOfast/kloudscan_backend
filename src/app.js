@@ -1,23 +1,12 @@
-// const express = require("express");
-// const bodyParser = require("body-parser");
-// const cors = require("cors");
-// const routes = require("./routes");
-
-// const app = express();
-// app.use(cors());
-// app.use(bodyParser.json());
-
-// app.use("/api/emirates", routes);
-
-// module.exports = app;
-
-
-
 const express = require("express");
+const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
 
 const app = express();
+
+// CORS middleware - allow all origins for development
+app.use(cors());
 
 // Middleware
 app.use(express.json());
@@ -30,5 +19,25 @@ app.use("/uploads", express.static(uploadsPath));
 // Routes
 const emiratesRoutes = require("./routes");
 app.use("/api/emirates", emiratesRoutes);
+
+// Health check endpoint for browser testing
+app.get("/", (req, res) => {
+  res.json({ 
+    message: "Backend server is running!",
+    status: "OK",
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Something went wrong!", error: err.message });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
 
 module.exports = app;
