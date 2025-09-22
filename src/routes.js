@@ -16,15 +16,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Upload front & back for scanning and verification
-router.post(
-  "/scan",
-  upload.fields([
-    { name: "Front_EmiratesID1", maxCount: 1 },
-    { name: "Back_EmiratesID2", maxCount: 1 },
-  ]),
-  verifyEmiratesId
-);
 
 // Verify Emirates ID (OCR only)
 router.post(
