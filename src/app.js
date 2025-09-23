@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
+// const syncDatabase = require("../sync-database");
+// syncDatabase();
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.use("/uploads", express.static(uploadsPath));
 
 // Routes
 const emiratesRoutes = require("./routes");
+const syncDatabase = require("../sync-database");
+syncDatabase();
 app.use("/api/emirates", emiratesRoutes);
 
 // Health check endpoint for browser testing
