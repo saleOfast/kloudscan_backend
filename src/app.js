@@ -8,9 +8,13 @@ const app = express();
 // CORS middleware - allow all origins for development
 app.use(cors());
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+// // Middleware
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Serve uploads folder as static so frontend can access images
 const uploadsPath = path.join(__dirname, "..", "uploads");
