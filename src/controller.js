@@ -70,12 +70,22 @@ const backUrl  = `${baseUrl}/uploads/${backFileName}`;
 
 exports.saveEmiratesId = async (req, res) => {
   try {
-    const { 
+    // Handle both nested data structure and direct structure
+    let { 
       front_result, 
       back_result, 
       Front_EmiratesID1, 
       Back_EmiratesID2 
     } = req.body;
+
+    // If data is nested in a 'data' property, extract it
+    if (req.body.data && !front_result && !back_result && !Front_EmiratesID1 && !Back_EmiratesID2) {
+      const nestedData = req.body.data;
+      front_result = nestedData.front_result;
+      back_result = nestedData.back_result;
+      Front_EmiratesID1 = nestedData.Front_EmiratesID1;
+      Back_EmiratesID2 = nestedData.Back_EmiratesID2;
+    }
 
     if (!front_result || !back_result || !Front_EmiratesID1 || !Back_EmiratesID2) {
       return res.status(400).json({ message: "Missing required fields: front_result, back_result, Front_EmiratesID1, Back_EmiratesID2" });
