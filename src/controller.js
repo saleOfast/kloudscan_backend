@@ -81,6 +81,38 @@ exports.saveEmiratesId = async (req, res) => {
     const frontData = front_result.data || {};
     const backData = back_result.data || {};
 
+    // Check for duplicate records based on ID numbers
+    const frontIdNumber = frontData.idNumber;
+    const backIdNumber = backData.idNumber;
+    const backCardNumber = backData.cardNumber;
+
+    // Build where clause for duplicate check
+    const whereClause = {};
+    if (frontIdNumber) {
+      whereClause.front_id_number = frontIdNumber;
+    }
+    if (backIdNumber) {
+      whereClause.back_id_number = backIdNumber;
+    }
+    if (backCardNumber) {
+      whereClause.back_card_number = backCardNumber;
+    }
+
+    // Only check for duplicates if we have at least one identifier
+    if (Object.keys(whereClause).length > 0) {
+      const existingRecord = await EmiratesID.findOne({
+        where: whereClause
+      });
+
+      if (existingRecord) {
+        return res.status(409).json({ 
+          message: "Emirates ID data already exists",
+          existingRecordId: existingRecord.id,
+          createdAt: existingRecord.createdAt
+        });
+      }
+    }
+
     // Helper function to parse date strings
     const parseDate = (dateString) => {
       if (!dateString) return null;
@@ -91,15 +123,9 @@ exports.saveEmiratesId = async (req, res) => {
 
     // Create the record with all OCR data
     const record = await EmiratesID.create({
-      // Main fields (prioritize back data as it's usually more complete)
-      // ID_number: backData.idNumber || frontData.idNumber,
-      // name: backData.name || frontData.name,
-      // gender: backData.sex || frontData.sex,
-      // dob: parseDate(backData.DOB || frontData.DOB),
-      // nationality: backData.nationality || frontData.nationality,
-      // expiry_date: parseDate(backData.expiryDate || frontData.expiryDate),
-      // Front_EmiratesID1,
-      // Back_EmiratesID2,
+      // File paths for front and back images
+      Front_EmiratesID1,
+      Back_EmiratesID2,
       
       // Front OCR result fields
       front_record_id: front_result.recordId,

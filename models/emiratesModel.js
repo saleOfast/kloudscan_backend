@@ -30,14 +30,14 @@ module.exports = (sequelize, DataTypes) => {
       //   type: DataTypes.DATEONLY,
       //   allowNull: true,
       // },
-      // Front_EmiratesID1: {
-      //   type: DataTypes.STRING, // store filename or path
-      //   allowNull: true,
-      // },
-      // Back_EmiratesID2: {
-      //   type: DataTypes.STRING, // store filename or path
-      //   allowNull: true,
-      // },
+      Front_EmiratesID1: {
+        type: DataTypes.STRING, // store filename or path
+        allowNull: true,
+      },
+      Back_EmiratesID2: {
+        type: DataTypes.STRING, // store filename or path
+        allowNull: true,
+      },
       // Front OCR result fields
       front_record_id: {
         type: DataTypes.STRING,
