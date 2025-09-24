@@ -24,8 +24,8 @@ app.use("/uploads", express.static(uploadsPath));
 
 // Routes
 const emiratesRoutes = require("./routes");
-const syncDatabase = require("../sync-database");
-syncDatabase();
+// const syncDatabase = require("../sync-database");
+// syncDatabase();
 app.use("/api/emirates", emiratesRoutes);
 
 // Health check endpoint for browser testing
