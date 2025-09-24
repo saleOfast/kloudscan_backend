@@ -2,15 +2,19 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
+// const syncDatabase = require("../sync-database");
+// syncDatabase();
 
 const app = express();
 
 // CORS middleware - allow all origins for development
 app.use(cors());
 
-// Middleware
+
+// // Middleware
 // app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
@@ -20,6 +24,8 @@ app.use("/uploads", express.static(uploadsPath));
 
 // Routes
 const emiratesRoutes = require("./routes");
+const syncDatabase = require("../sync-database");
+syncDatabase();
 app.use("/api/emirates", emiratesRoutes);
 
 // Health check endpoint for browser testing

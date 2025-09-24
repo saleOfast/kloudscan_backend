@@ -20,4 +20,6 @@ async function syncDatabase() {
   }
 }
 
-syncDatabase();
+module.exports = syncDatabase;
+
+//syncDatabase();
