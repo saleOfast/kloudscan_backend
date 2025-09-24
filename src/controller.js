@@ -45,10 +45,14 @@ exports.verifyEmiratesId = async (req, res) => {
       { headers: { "Content-Type": "application/json", key: process.env.PIXLAI_API_KEY } }
     );
 
-    // build URLs
-    const frontUrl = `${process.env.BASE_URL}/uploads/${frontFileName}`;
-    const backUrl = `${process.env.BASE_URL}/uploads/${backFileName}`;
+    // // build URLs
+    // const frontUrl = `${process.env.BASE_URL}/uploads/${frontFileName}`;
+    // const backUrl = `${process.env.BASE_URL}/uploads/${backFileName}`;
 
+
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
+const frontUrl = `${baseUrl}/uploads/${frontFileName}`;
+const backUrl  = `${baseUrl}/uploads/${backFileName}`;
     res.json({
       message: "Verification successful",
       data: {
