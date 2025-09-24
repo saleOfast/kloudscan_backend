@@ -92,14 +92,14 @@ exports.saveEmiratesId = async (req, res) => {
     // Create the record with all OCR data
     const record = await EmiratesID.create({
       // Main fields (prioritize back data as it's usually more complete)
-      ID_number: backData.idNumber || frontData.idNumber,
-      name: backData.name || frontData.name,
-      gender: backData.sex || frontData.sex,
-      dob: parseDate(backData.DOB || frontData.DOB),
-      nationality: backData.nationality || frontData.nationality,
-      expiry_date: parseDate(backData.expiryDate || frontData.expiryDate),
-      Front_EmiratesID1,
-      Back_EmiratesID2,
+      // ID_number: backData.idNumber || frontData.idNumber,
+      // name: backData.name || frontData.name,
+      // gender: backData.sex || frontData.sex,
+      // dob: parseDate(backData.DOB || frontData.DOB),
+      // nationality: backData.nationality || frontData.nationality,
+      // expiry_date: parseDate(backData.expiryDate || frontData.expiryDate),
+      // Front_EmiratesID1,
+      // Back_EmiratesID2,
       
       // Front OCR result fields
       front_record_id: front_result.recordId,
