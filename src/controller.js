@@ -92,8 +92,8 @@ exports.saveEmiratesId = async (req, res) => {
     }
 
     // Extract data from front_result
-    const frontData = front_result.data || {};
-    const backData = back_result.data || {};
+    const frontData = front_result || {};
+    const backData = back_result || {};
 
     // Check for duplicate records based on ID numbers
     const frontIdNumber = frontData.idNumber;
@@ -130,10 +130,22 @@ exports.saveEmiratesId = async (req, res) => {
     // Helper function to parse date strings
     const parseDate = (dateString) => {
       if (!dateString) return null;
-      // Handle different date formats: DD-MM-YYYY, MM/DD/YYYY, etc.
+    
+      // Check for DD-MM-YYYY format
+      const parts = dateString.split("-");
+      if (parts.length === 3) {
+        const [day, month, year] = parts.map(Number);
+        if (!day || !month || !year) return null;
+    
+        const date = new Date(year, month - 1, day); // month is 0-indexed
+        return isNaN(date.getTime()) ? null : date.toISOString().split("T")[0];
+      }
+    
+      // fallback for other formats
       const date = new Date(dateString);
-      return isNaN(date.getTime()) ? null : date.toISOString().split('T')[0];
+      return isNaN(date.getTime()) ? null : date.toISOString().split("T")[0];
     };
+    
 
     // Create the record with all OCR data
     const record = await EmiratesID.create({
@@ -148,12 +160,12 @@ exports.saveEmiratesId = async (req, res) => {
       front_name: frontData.name,
       front_sex: frontData.sex,
       front_nationality: frontData.nationality,
-      front_dob: parseDate(frontData.DOB),
+      front_dob: parseDate(frontData.dob),
       front_issue_date: parseDate(frontData.issueDate),
       front_expiry_date: parseDate(frontData.expiryDate),
-      front_utc_time_stamp: front_result.utc_time_stamp,
-      front_arabic_name_status: frontData.arabic_name_status,
-      front_arabic_name: frontData.arabic_name,
+      front_utc_time_stamp: front_result.utcTimeStamp,
+      front_arabic_name_status: frontData.arabicNameStatus,
+      front_arabic_name: frontData.arabicName,
       
       // Back OCR result fields
       back_record_id: back_result.recordId,
@@ -163,14 +175,14 @@ exports.saveEmiratesId = async (req, res) => {
       back_name: backData.name,
       back_sex: backData.sex,
       back_nationality: backData.nationality,
-      back_dob: parseDate(backData.DOB),
+      back_dob: parseDate(backData.dob),
       back_issue_date: parseDate(backData.issueDate),
       back_issue_place: backData.issuePlace,
       back_expiry_date: parseDate(backData.expiryDate),
       back_occupation: backData.occupation,
       back_employer: backData.employer,
       back_family_sponsor: backData.familySponsor,
-      back_utc_time_stamp: back_result.utc_time_stamp,
+      back_utc_time_stamp: back_result.utcTimeStamp,
     });
 
     res.json({ 
